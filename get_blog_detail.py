@@ -19,8 +19,8 @@ def get_blog_info(site, article_id, user):
 	decode_json = json.loads(response_json)
 
 	article_dict['photo_count'] = len(decode_json['article']['images'])
+	#用正規表達去除tag 拿文字數 (跟html的article-content裡面一樣的東西)
 	body = decode_json['article']['body'].encode('UTF-8')
-	#regular expression
 	p = re.compile('(<.*?>|&nbsp;|&darr;|<!--.*?-->)')	
 	content = p.sub('',body)
 	article_dict['content'] = content.replace(",","，")
@@ -28,15 +28,32 @@ def get_blog_info(site, article_id, user):
 	# p = re.compile( '(one|two|three)') 
  	# print(p.sub( 'num', 'one word two words three words'))
 
-	#再來用網址去爬 article-content裡面用正規表達拿文字數  然後拿FB讚數 然後用beautysoup
+	#再來用網址去爬 用beautyfulsoup拿FB讚數 
 	from bs4 import BeautifulSoup
 
-	response = urllib2.urlopen(site)
+	#fb plugin的網址 發現的規則
+	fb_like_url = 'https://www.facebook.com/plugins/like.php?href='+site+'&show_faces=false&width=500&action=like&font=verdana&colorscheme=light&height=30'
+	response = urllib2.urlopen(fb_like_url)
 	response_html = response.read()
-	#用beautyfulsoup解析html
-	soup = BeautifulSoup(''.join(response_html))
-	print(soup.html.head.title)
-	
 
-	time.sleep(0.5)
+	soup = BeautifulSoup(''.join(response_html))
+	fb_like = soup.findAll("span", { "class" : "hidden_elem" })
+	for like in fb_like:
+		p = re.compile('[^0-9]') #將那段文字去除到只剩數字
+		content = p.sub('',like.get_text())
+		print(content)
+		article_dict['fb_likes'] = content
+
+
+	# #用ghost.py
+	# from ghost import Ghost
+	# ghost = Ghost(wait_timeout = 30)
+	# page,resources = ghost.open('https://www.facebook.com/plugins/like.php?href=http://jesse0218.pixnet.net/blog/post/30882673&layout=standard&show_faces=false&width=500&action=like&font=verdana&colorscheme=light&height=30')
+	# # ghost.wait_for_page_loaded()
+	# print(page.content)
+	# article_dict['content_count'] = page.content
+	# # ghost.show()
+	# # ghost.sleep(2)
+
+	time.sleep(0.3)
 	return article_dict
