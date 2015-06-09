@@ -35,7 +35,7 @@ for i in decodejson['articles']:
 	    f.write(i['user']['name'] + ',')
 	    #獲得圖片數 字數 讚數
 	    blog_info = gbd.get_blog_info(i['link'].encode('UTF-8'), i['id'], i['user']['name'])
-	    print(blog_info)
+	    # print(blog_info)
 	    f.write(str(blog_info['photo_count']) + ',')
 	    f.write(str(blog_info['content']) + ',')
 	    f.write(str(blog_info['content_count']) + ',')
