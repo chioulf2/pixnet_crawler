@@ -8,9 +8,8 @@ import time
 import get_blog_detail as gbd
 
 #作者清單
-#'anise', 'bluehero', 'carriewang', 
-user_list = ['jesse0218', 'meijuily',
-			 'meiko1101', 'millychun', 'nellydyu', 'paine0602', 'sezna627']
+#'anise', 'bluehero', 'carriewang', 'jesse0218', 'meijuily', 'meiko1101', 'millychun', 'nellydyu', 
+user_list = ['paine0602', 'sezna627']
 
 
 
