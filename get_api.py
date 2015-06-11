@@ -19,7 +19,8 @@ for user in user_list:
 	csv_title = str(user)+'.csv'
 	f = open(csv_title,"w") 
 
-	api_url = "https://emma.pixnet.cc/blog/articles?user="+user+"&format=json"
+	#下面這行 用%s這種漂亮的寫法 把user代入進字串裡
+	api_url = "https://emma.pixnet.cc/blog/articles?user=%s&format=json" % user
 	print('loading '+api_url)
 	response = urllib2.urlopen(api_url)
 	response_json = response.read()
